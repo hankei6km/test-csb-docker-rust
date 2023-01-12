@@ -1,1 +1,3 @@
-FROM ghcr.io/hankei6km/h6-dev-containers:rust
+FROM rust:slim
+
+RUN rustup component add clippy
