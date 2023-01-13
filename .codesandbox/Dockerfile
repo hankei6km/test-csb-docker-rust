@@ -1,6 +1,14 @@
 FROM rust:slim
 
-RUN apt-get update -y && apt-get install --no-install-recommends -y wget \
+# Install tools
+RUN apt-get update -y \
+  && apt-get install --no-install-recommends -y curl wget \
+  # Install GitHub CLI
+  && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+  && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+  && apt-get update -y \
+  && apt-get install --no-install-recommends -y gh \
   # Install code-cli
   && mkdir -p /tmp/code-server && cd /tmp/code-server \
   && wget -q -O- 'https://code.visualstudio.com/sha/download?build=stable&os=cli-alpine-x64' | tar -zxf - \
